@@ -13,8 +13,11 @@ class TinypassStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        # DynamoDB Table
-        table = dynamodb.TableV2(self, f"Table{construct_id}", partition_key=dynamodb.Attribute(name="name_hash", type=dynamodb.AttributeType.STRING))
+        # DynamoDB Table with partition key UserID and range key EntryName
+        table = dynamodb.Table(self, f"Table{construct_id}",
+            partition_key=dynamodb.Attribute(name="UserID", type=dynamodb.AttributeType.STRING),
+            sort_key=dynamodb.Attribute(name="EntryName", type=dynamodb.AttributeType.STRING)
+        )
 
         dockerFunc = _lambda.DockerImageFunction(
             scope=self,
@@ -26,7 +29,7 @@ class TinypassStack(Stack):
             code=_lambda.DockerImageCode.from_image_asset(
                 directory="src"
             ),
-            timeout=Duration.seconds(300)
+            timeout=Duration.seconds(900)
         )
 
         api = apigateway.LambdaRestApi(self, f"API{construct_id}",
