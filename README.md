@@ -1,3 +1,5 @@
+# Welcome to TinyPass
+The goal of this project is to implement a simple API for password management. The API should allow users to create, update, delete and retrieve passwords. The API should also allow users to retrieve all passwords for a given user.
 
 # Welcome to your CDK Python project!
 
