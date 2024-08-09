@@ -26,5 +26,21 @@ def upsert_password(user_id, entry_name, password):
     else:
         return False
     
+def delete_password(user_id, entry_name):
+    # Delete password
+    dynamodb = get_dynamodb_client()
+    response = dynamodb.delete_item (
+        TableName=TABLE_NAME,
+        Key= {
+            'UserID' : {'S' : user_id},
+            'EntryName' : {'S' : entry_name}
+        }
+    )
+    if response['ResponseMetadata']['HTTPStatusCode'] == 200:
+        return True
+    else:
+        return False
+    
 if __name__ == "__main__":
     print(upsert_password('user1', 'entry1', 'password1'))
+    print(delete_password('user1', 'entry1'))
